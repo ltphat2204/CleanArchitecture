@@ -17,4 +17,8 @@ public class PagedResponseDto<T> {
         this.totalPages = totalPages;
         this.totalItems = totalItems;
     }
+
+    public List<T> getContent() {
+        return items;
+    }
 }

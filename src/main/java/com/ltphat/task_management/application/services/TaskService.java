@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -35,6 +36,10 @@ public class TaskService {
             tasksPage = taskRepository.findAll(pageable);
         } else {
             tasksPage = taskRepository.findByNameContainingIgnoreCase(search, pageable);
+        }
+
+        if (tasksPage == null) {
+            return new PagedResponseDto<>(Collections.emptyList(), 1, 1, 0);
         }
 
         List<TaskResponseDto> taskDtos = tasksPage.map(taskMapper::taskToTaskResponseDto).getContent();
