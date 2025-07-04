@@ -3,8 +3,10 @@ package com.ltphat.task_management.application.services;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ltphat.task_management.application.dtos.category.CategoryResponseDto;
 import com.ltphat.task_management.application.dtos.shared.PagedResponseDto;
 import com.ltphat.task_management.application.mappers.TaskMapper;
+import com.ltphat.task_management.domain.model.Category;
 import com.ltphat.task_management.domain.model.Task;
 import com.ltphat.task_management.domain.repository.TaskRepository;
 import com.ltphat.task_management.application.dtos.task.TaskRequestDto;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +40,17 @@ public class TaskServiceTest {
     private Task task;
     private TaskRequestDto taskRequestDto;
     private TaskResponseDto taskResponseDto;
-
+    private Category category;
+    private CategoryResponseDto categoryResponseDto;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        task = new Task(1L, "Task 1", "Description of Task 1", "Pending");
-        taskRequestDto = new TaskRequestDto("Task 1", "Description of Task 1", "Pending");
-        taskResponseDto = new TaskResponseDto(1L, "Task 1", "Description of Task 1", "Pending");
+        category = new Category(1L, "Work", "Work related tasks", "blue", Instant.now());
+        categoryResponseDto = new CategoryResponseDto(1L, "Work", "Work related tasks", "blue", category.getCreatedAt());
+
+        task = new Task(1L, "Task 1", "Description of Task 1", "Pending", category);
+        taskRequestDto = new TaskRequestDto("Task 1", "Description of Task 1", "Pending",1L);
+        taskResponseDto = new TaskResponseDto(1L, "Task 1", "Description of Task 1", "Pending", categoryResponseDto);
     }
 
     @Test
