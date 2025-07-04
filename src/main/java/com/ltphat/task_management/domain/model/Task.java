@@ -1,9 +1,6 @@
 package com.ltphat.task_management.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -19,5 +16,7 @@ public class Task {
 
     private String name;
     private String description;
-    private String status; // Pending, Completed
-}
+    private String status; // Pending,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;}
