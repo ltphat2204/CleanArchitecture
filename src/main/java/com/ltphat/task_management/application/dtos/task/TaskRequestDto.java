@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class TaskRequestDto {
     private String name;
     private String description;
-    private String status; // Pending, Completed
+    private String status; // Pending,
+    private Long categoryId;
 }

@@ -8,5 +8,6 @@ public class TaskDto {
     private String name;
     private String description;
     private String status; // Pending, Completed
+    private Long categoryId;
 
 }
