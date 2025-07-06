@@ -69,13 +69,19 @@ public class TaskControllerTest {
                 1   // totalItems
         );
 
-        log.info(pagedResponseDto.toString());
+        when(taskService.getAllTasks(
+                isNull(),
+                eq("name"),
+                eq("asc"),
+                eq(0),
+                eq(5))
+        ).thenReturn(pagedResponseDto);
 
-        when(taskService.getAllTasks(anyString(), anyString(), anyString(), eq(0), eq(5)))
-                .thenReturn(pagedResponseDto);
 
-
-        mockMvc.perform(get("/tasks?page=0&size=5").accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/tasks")
+                        .param("page", "0")
+                        .param("size", "5")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items[0].name").value("Task 1"))
