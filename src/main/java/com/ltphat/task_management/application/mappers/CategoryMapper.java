@@ -5,7 +5,6 @@ import com.ltphat.task_management.application.dtos.category.CategoryResponseDto;
 import com.ltphat.task_management.application.dtos.category.CategoryUpdateDto;
 import com.ltphat.task_management.domain.model.Category;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

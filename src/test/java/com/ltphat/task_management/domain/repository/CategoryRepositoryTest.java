@@ -37,7 +37,7 @@ class CategoryRepositoryTest {
         testEntityManager.persist(new Category(null, "Personal", "Personal tasks", "green", null));
         testEntityManager.persist(new Category(null, "Work", "Project A", "blue", null));
         testEntityManager.persist(new Category(null, "Study", "Spring Boot study", "yellow", null));
-        testEntityManager.flush(); // Đẩy tất cả thay đổi vào DB
+        testEntityManager.flush();
 
         Page<Category> resultPage = categoryRepository.findCategoryByName("Work", PageRequest.of(0, 5));
 

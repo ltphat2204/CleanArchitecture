@@ -2,10 +2,8 @@ package com.ltphat.task_management.domain.repository;
 
 import com.ltphat.task_management.domain.model.Category;
 import com.ltphat.task_management.domain.model.Task;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -42,6 +40,71 @@ public class TaskRepositoryTest {
         assertNotNull(tasks);
         assertFalse(tasks.isEmpty());
         assertEquals("Task 1", tasks.getContent().get(0).getName());
+    }
+
+    @Test
+    void testFindByNameContainingIgnoreCase_CaseInsensitive() {
+        var pageable = PageRequest.of(0, 5);
+        // Tìm kiếm bằng chữ "TASK" (in hoa)
+        var tasks = taskRepository.findByNameContainingIgnoreCase("TASK", pageable);
+
+        assertNotNull(tasks);
+        assertFalse(tasks.isEmpty());
+        assertEquals(1, tasks.getTotalElements());
+        assertEquals("Task 1", tasks.getContent().get(0).getName());
+    }
+
+    @Test
+    void testFindByNameContainingIgnoreCase_NotFound() {
+        var pageable = PageRequest.of(0, 5);
+        var tasks = taskRepository.findByNameContainingIgnoreCase("NonExistentTask", pageable);
+
+        assertNotNull(tasks);
+        assertTrue(tasks.isEmpty());
+        assertEquals(0, tasks.getTotalElements());
+    }
+
+    @Test
+    void testSave_CreateNewTask() {
+        Category existingCategory = testEntityManager.find(Category.class, task.getCategory().getId());
+        Task newTask = new Task(null, "Task 2", "A brand new task", "Todo", existingCategory);
+
+        Task savedTask = taskRepository.save(newTask);
+
+        assertNotNull(savedTask);
+        assertNotNull(savedTask.getId());
+        assertEquals("Task 2", savedTask.getName());
+
+        Task foundTask = testEntityManager.find(Task.class, savedTask.getId());
+        assertEquals("Task 2", foundTask.getName());
+    }
+
+    @Test
+    void testSave_UpdateExistingTask() {
+        Optional<Task> taskToUpdateOpt = taskRepository.findById(task.getId());
+        assertTrue(taskToUpdateOpt.isPresent());
+
+        Task taskToUpdate = taskToUpdateOpt.get();
+        taskToUpdate.setStatus("Completed");
+        taskRepository.save(taskToUpdate);
+
+        Task updatedTask = testEntityManager.find(Task.class, task.getId());
+        assertEquals("Completed", updatedTask.getStatus());
+        assertEquals("Task 1", updatedTask.getName());
+    }
+
+    @Test
+    void testDeleteById() {
+
+        Long taskId = task.getId();
+
+        assertTrue(taskRepository.findById(taskId).isPresent());
+
+        taskRepository.deleteById(taskId);
+        testEntityManager.flush();
+
+        Optional<Task> deletedTaskOpt = taskRepository.findById(taskId);
+        assertFalse(deletedTaskOpt.isPresent());
     }
 
     @Test
