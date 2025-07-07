@@ -3,7 +3,6 @@ package com.ltphat.task_management.application.services;
 import com.ltphat.task_management.application.dtos.shared.PagedResponseDto;
 import com.ltphat.task_management.application.dtos.task.TaskRequestDto;
 import com.ltphat.task_management.application.dtos.task.TaskResponseDto;
-import com.ltphat.task_management.application.mappers.CategoryMapper;
 import com.ltphat.task_management.application.mappers.TaskMapper;
 import com.ltphat.task_management.domain.model.Category;
 import com.ltphat.task_management.domain.model.Task;
